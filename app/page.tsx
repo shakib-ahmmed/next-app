@@ -79,15 +79,15 @@ export default function LandingPage() {
         <h2 className="text-4xl font-bold text-center mb-12">Testimonials</h2>
         <div className="container mx-auto px-6 grid md:grid-cols-3 gap-8">
           <div className="card shadow-lg p-6">
-            <p>"Amazing service and fast delivery!"</p>
+            <p>Amazing service and fast delivery!</p>
             <p className="mt-2 font-bold">- John Doe</p>
           </div>
           <div className="card shadow-lg p-6">
-            <p>"Best prices and quality products."</p>
+            <p>Best prices and quality products.</p>
             <p className="mt-2 font-bold">- Jane Smith</p>
           </div>
           <div className="card shadow-lg p-6">
-            <p>"Customer support is super helpful."</p>
+            <p>Customer support is super helpful.</p>
             <p className="mt-2 font-bold">- Mike Johnson</p>
           </div>
         </div>

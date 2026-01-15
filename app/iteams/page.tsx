@@ -1,4 +1,5 @@
-import ItemCard from "@/components/ItemCard";
+import ItemCard from "@/componnts/IteamCard";
+
 
 const items = [
     { id: "1", name: "Item One", price: "$20" },
