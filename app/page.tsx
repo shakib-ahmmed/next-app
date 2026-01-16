@@ -1,6 +1,7 @@
 "use client";
 
 import AboutSection from "@/componnts/aboutsection";
+import ContactSection from "@/componnts/contactsection";
 import HeroSection from "@/componnts/herosection";
 import PopularItems from "@/componnts/popularitems";
 
@@ -74,15 +75,11 @@ export default function LandingPage() {
       </section>
 
       {/* 7️⃣ Contact Section */}
+
       <section className="bg-base-200 py-20">
-        <h2 className="text-4xl font-bold text-center mb-8">Contact Us</h2>
-        <form className="max-w-2xl mx-auto flex flex-col gap-4">
-          <input type="text" placeholder="Name" className="input input-bordered w-full" />
-          <input type="email" placeholder="Email" className="input input-bordered w-full" />
-          <textarea placeholder="Message" className="textarea textarea-bordered w-full"></textarea>
-          <button type="submit" className="btn btn-primary w-full">Send Message</button>
-        </form>
+        <ContactSection />
       </section>
+
     </div>
   );
 }
