@@ -1,13 +1,21 @@
 import Cookies from "js-cookie";
 
-export const login = () => {
-  Cookies.set("auth", "true");
-};
 
-export const logout = () => {
-  Cookies.remove("auth");
-};
+const EMAIL = "admin@example.com";
+const PASSWORD = "password123";
 
-export const isLoggedIn = () => {
+export function login(email: string, password: string) {
+  if (email === EMAIL && password === PASSWORD) {
+    Cookies.set("auth", "true", { expires: 1000 }); 
+    return true;
+  }
+  return false;
+}
+
+export function isLoggedIn() {
   return Cookies.get("auth") === "true";
-};
+}
+
+export function logout() {
+  Cookies.remove("auth");
+}

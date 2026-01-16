@@ -4,7 +4,7 @@ import Link from "next/link";
 import { logout, isLoggedIn } from "@/lib/auth";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Sun, Moon, Menu } from "lucide-react";
+import { Sun, Moon, Menu, X } from "lucide-react";
 
 export default function Navbar() {
   const router = useRouter();
@@ -30,73 +30,172 @@ export default function Navbar() {
   }, []);
 
   const toggleTheme = () => {
-    const newTheme = theme === "light" ? "dark" : "light";
-    setTheme(newTheme);
-    document.documentElement.classList.toggle("dark", newTheme === "dark");
-    localStorage.setItem("theme", newTheme);
+    const next = theme === "light" ? "dark" : "light";
+    setTheme(next);
+    document.documentElement.classList.toggle("dark", next === "dark");
+    localStorage.setItem("theme", next);
   };
 
   const handleLogout = () => {
     logout();
     setLoggedIn(false);
+    setOpen(false);
     router.push("/");
   };
 
   if (!mounted) return null;
 
   return (
-    <header className="sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur border-b border-slate-200 dark:border-slate-700">
+    <header className="sticky top-0 z-50 border-b border-slate-200/50 dark:border-slate-700/50 bg-white/70 dark:bg-slate-900/70 backdrop-blur-lg">
       <nav className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+
         {/* Logo */}
-        <Link href="/" className="text-xl font-bold text-indigo-600 dark:text-indigo-400">
+        <Link
+          href="/"
+          className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent"
+        >
           MyApp
         </Link>
 
         {/* Desktop */}
         <div className="hidden md:flex items-center gap-4">
-          <Link href="/items" className="nav-link">Items</Link>
+          <NavLink href="/items">Items</NavLink>
 
           {loggedIn ? (
             <>
-              <Link href="/add-item" className="btn-primary">Add Item</Link>
-              <button onClick={handleLogout} className="btn-danger">Logout</button>
+              <PrimaryLink href="/add-item">Add Item</PrimaryLink>
+              <DangerButton onClick={handleLogout}>Logout</DangerButton>
             </>
           ) : (
-            <Link href="/login" className="btn-primary">Login</Link>
+            <PrimaryLink href="/login">Login</PrimaryLink>
           )}
 
-          <button onClick={toggleTheme} className="icon-btn">
+          <IconButton onClick={toggleTheme} ariaLabel="Toggle theme">
             {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
-          </button>
+          </IconButton>
         </div>
 
         {/* Mobile menu button */}
-        <button onClick={() => setOpen(!open)} className="md:hidden icon-btn">
-          <Menu size={22} />
-        </button>
+        <IconButton
+          onClick={() => setOpen(!open)}
+          ariaLabel="Open menu"
+          className="md:hidden"
+        >
+          {open ? <X size={22} /> : <Menu size={22} />}
+        </IconButton>
       </nav>
 
-      {/* Mobile menu */}
-      {open && (
-        <div className="md:hidden bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700">
-          <div className="flex flex-col gap-2 p-4">
-            <Link href="/items" onClick={() => setOpen(false)} className="nav-link">Items</Link>
+      {/* Mobile Menu */}
+      <div
+        className={`md:hidden overflow-hidden transition-all duration-300 ${open ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+          }`}
+      >
+        <div className="px-4 pb-4 pt-2 flex flex-col gap-3 bg-white dark:bg-slate-900">
+          <NavLink href="/items" onClick={() => setOpen(false)}>
+            Items
+          </NavLink>
 
-            {loggedIn ? (
-              <>
-                <Link href="/add-item" onClick={() => setOpen(false)} className="btn-primary w-full">Add Item</Link>
-                <button onClick={handleLogout} className="btn-danger w-full">Logout</button>
-              </>
-            ) : (
-              <Link href="/login" onClick={() => setOpen(false)} className="btn-primary w-full">Login</Link>
-            )}
+          {loggedIn ? (
+            <>
+              <PrimaryLink href="/add-item" onClick={() => setOpen(false)}>
+                Add Item
+              </PrimaryLink>
+              <DangerButton onClick={handleLogout}>Logout</DangerButton>
+            </>
+          ) : (
+            <PrimaryLink href="/login" onClick={() => setOpen(false)}>
+              Login
+            </PrimaryLink>
+          )}
 
-            <button onClick={toggleTheme} className="icon-btn self-start mt-2">
-              {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
-            </button>
-          </div>
+          <IconButton onClick={toggleTheme} ariaLabel="Toggle theme" className="self-start mt-2">
+            {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
+          </IconButton>
         </div>
-      )}
+      </div>
     </header>
+  );
+}
+
+/* =========================
+   Reusable Components
+========================= */
+
+function NavLink({
+  href,
+  children,
+  onClick,
+}: {
+  href: string;
+  children: React.ReactNode;
+  onClick?: () => void;
+}) {
+  return (
+    <Link
+      href={href}
+      onClick={onClick}
+      className="text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400 transition"
+    >
+      {children}
+    </Link>
+  );
+}
+
+function PrimaryLink({
+  href,
+  children,
+  onClick,
+}: {
+  href: string;
+  children: React.ReactNode;
+  onClick?: () => void;
+}) {
+  return (
+    <Link
+      href={href}
+      onClick={onClick}
+      className="inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-500 transition shadow"
+    >
+      {children}
+    </Link>
+  );
+}
+
+function DangerButton({
+  children,
+  onClick,
+}: {
+  children: React.ReactNode;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className="inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-semibold text-white bg-rose-600 hover:bg-rose-500 transition shadow"
+    >
+      {children}
+    </button>
+  );
+}
+
+function IconButton({
+  children,
+  onClick,
+  ariaLabel,
+  className = "",
+}: {
+  children: React.ReactNode;
+  onClick: () => void;
+  ariaLabel: string;
+  className?: string;
+}) {
+  return (
+    <button
+      aria-label={ariaLabel}
+      onClick={onClick}
+      className={`inline-flex items-center justify-center rounded-lg p-2 text-slate-700 dark:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-700/60 transition ${className}`}
+    >
+      {children}
+    </button>
   );
 }
