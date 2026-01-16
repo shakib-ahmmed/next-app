@@ -73,7 +73,7 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
-
+      
       {/* 5️⃣ Testimonials Section */}
       <section className="bg-base-200 py-20">
         <h2 className="text-4xl font-bold text-center mb-12">Testimonials</h2>
