@@ -13,7 +13,7 @@ interface Item {
     image: string;
 }
 
-export default function PopularItems() {
+export default function RecentItems() {
     const [items, setItems] = useState<Item[] | null>(null);
 
     useEffect(() => {
@@ -22,23 +22,26 @@ export default function PopularItems() {
                 const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/items`);
                 if (!res.ok) throw new Error("Failed to fetch items");
                 const data: Item[] = await res.json();
-                setItems(data.slice(0, 3)); // first 3 items
+
+
+                const sorted = data.sort((a, b) => b.id - a.id);
+
+                setItems(sorted.slice(0, 3));
             } catch (err) {
                 console.error(err);
-                toast.error("Failed to load popular items");
+                toast.error("Failed to load recent items");
             }
         };
 
         fetchItems();
     }, []);
 
-    // Only render after data is loaded to avoid SSR mismatch
-    if (!items) return null; // server renders empty HTML
+    if (!items) return null;
 
     return (
         <section className="container mx-auto px-6 py-20">
             <Toaster position="top-right" />
-            <h2 className="text-4xl font-bold text-center mb-8">Our Popular Items</h2>
+            <h2 className="text-4xl font-bold text-center mb-8">Recently Added Items</h2>
             <div className="grid md:grid-cols-3 gap-6">
                 {items.map((item) => (
                     <Link
