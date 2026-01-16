@@ -1,67 +1,88 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import toast, { Toaster } from "react-hot-toast";
+import AboutSection from "@/componnts/aboutsection";
+import HeroSection from "@/componnts/herosection";
+import PopularItems from "@/componnts/popularitems";
 
-interface Item {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  image: string;
-}
-
-export default function PopularItems() {
-  const [items, setItems] = useState<Item[] | null>(null);
-
-  useEffect(() => {
-    const fetchItems = async () => {
-      try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/items`);
-        if (!res.ok) throw new Error("Failed to fetch items");
-        const data: Item[] = await res.json();
-        setItems(data.slice(0, 3)); 
-      } catch (err) {
-        console.error(err);
-        toast.error("Failed to load popular items");
-      }
-    };
-
-    fetchItems();
-  }, []);
-
-    if (!items) return null; 
-
+export default function LandingPage() {
   return (
-    <section className="container mx-auto px-6 py-20">
-      <Toaster position="top-right" />
-      <h2 className="text-4xl font-bold text-center mb-8">Our Popular Items</h2>
-      <div className="grid md:grid-cols-3 gap-6">
-        {items.map((item) => (
-          <Link
-            key={item.id}
-            href={`/items/${item.id}`}
-            className="card bg-base-100 shadow-lg p-4 overflow-hidden hover:shadow-xl transition"
-          >
-            <div className="relative h-48 w-full mb-4 rounded overflow-hidden">
-              <Image
-                loader={({ src }) => `${process.env.NEXT_PUBLIC_API_URL}${src}`}
-                src={item.image}
-                alt={item.name}
-                fill
-                className="object-cover group-hover:scale-105 transition-transform"
-                placeholder="blur"
-                blurDataURL="/placeholder.png"
-              />
-            </div>
-            <h3 className="text-xl font-bold">{item.name}</h3>
-            <p className="text-sm text-base-content truncate">{item.description}</p>
-            <p className="text-indigo-600 font-semibold mt-1">${item.price}</p>
-          </Link>
-        ))}
+    <div className="space-y-32">
+
+      {/* 1️⃣ Hero Section */}
+
+      <div>
+        <HeroSection />
       </div>
-    </section>
+
+
+      {/* 2️⃣ About Section */}
+
+      <div>
+        <AboutSection />
+      </div>
+
+
+      {/* 3️⃣ Features Section */}
+      <section className="bg-base-200 py-20">
+        <div className="container mx-auto px-6 grid md:grid-cols-3 gap-10">
+          <div className="card shadow-lg p-6 text-center hover:scale-105 transition-transform">
+            <h3 className="text-2xl font-bold mb-2">Fast Delivery</h3>
+            <p>Get your products delivered quickly and reliably.</p>
+          </div>
+          <div className="card shadow-lg p-6 text-center hover:scale-105 transition-transform">
+            <h3 className="text-2xl font-bold mb-2">Best Prices</h3>
+            <p>We offer unbeatable prices on a wide range of products.</p>
+          </div>
+          <div className="card shadow-lg p-6 text-center hover:scale-105 transition-transform">
+            <h3 className="text-2xl font-bold mb-2">24/7 Support</h3>
+            <p>Our support team is here to help you anytime, anywhere.</p>
+          </div>
+        </div>
+      </section>
+
+
+      {/* PopularItem Section */}
+      <div>
+        <PopularItems />
+      </div>
+
+
+      {/* 5️⃣ Testimonials Section */}
+      <section className="bg-base-200 py-20">
+        <h2 className="text-4xl font-bold text-center mb-12">Testimonials</h2>
+        <div className="container mx-auto px-6 grid md:grid-cols-3 gap-8">
+          <div className="card shadow-lg p-6">
+            <p>Amazing service and fast delivery!</p>
+            <p className="mt-2 font-bold">- John Doe</p>
+          </div>
+          <div className="card shadow-lg p-6">
+            <p>Best prices and quality products.</p>
+            <p className="mt-2 font-bold">- Jane Smith</p>
+          </div>
+          <div className="card shadow-lg p-6">
+            <p>Customer support is super helpful.</p>
+            <p className="mt-2 font-bold">- Mike Johnson</p>
+          </div>
+        </div>
+      </section>
+
+      {/* 6️⃣ Call To Action Section */}
+      <section className="py-20 text-center">
+        <h2 className="text-4xl font-bold mb-6">Start Exploring Today</h2>
+        <p className="mb-6">Join thousands of users discovering amazing products every day.</p>
+        <a href="/items" className="btn btn-primary btn-lg">View Items</a>
+      </section>
+
+      {/* 7️⃣ Contact Section */}
+      <section className="bg-base-200 py-20">
+        <h2 className="text-4xl font-bold text-center mb-8">Contact Us</h2>
+        <form className="max-w-2xl mx-auto flex flex-col gap-4">
+          <input type="text" placeholder="Name" className="input input-bordered w-full" />
+          <input type="email" placeholder="Email" className="input input-bordered w-full" />
+          <textarea placeholder="Message" className="textarea textarea-bordered w-full"></textarea>
+          <button type="submit" className="btn btn-primary w-full">Send Message</button>
+        </form>
+      </section>
+    </div>
   );
 }
