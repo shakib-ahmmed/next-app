@@ -117,9 +117,7 @@ export default function Navbar() {
   );
 }
 
-/* =========================
-   Reusable Components
-========================= */
+
 
 function NavLink({
   href,
