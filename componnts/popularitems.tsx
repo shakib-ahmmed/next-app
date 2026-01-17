@@ -45,14 +45,13 @@ export default function RecentItems() {
             <div className="grid md:grid-cols-3 gap-6">
                 {items.map((item) => (
                     <Link
-                        key={item.id}
-                        href={`/items/${item.id}`}
+                        key={item._id}               
+                        href={`/items/${item._id}`}   
                         className="card bg-base-100 shadow-lg p-4 overflow-hidden hover:shadow-xl transition"
                     >
                         <div className="relative h-48 w-full mb-4 rounded overflow-hidden">
                             <Image
-                                loader={({ src }) => `${process.env.NEXT_PUBLIC_API_URL}${src}`}
-                                src={item.image}
+                                src={item.image}        
                                 alt={item.name}
                                 fill
                                 className="object-cover group-hover:scale-105 transition-transform"
