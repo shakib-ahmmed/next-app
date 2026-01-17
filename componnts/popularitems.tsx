@@ -6,7 +6,7 @@ import Link from "next/link";
 import toast, { Toaster } from "react-hot-toast";
 
 interface Item {
-    id: number;
+    _id: string;          // use _id from MongoDB
     name: string;
     description: string;
     price: number;
@@ -23,8 +23,10 @@ export default function RecentItems() {
                 if (!res.ok) throw new Error("Failed to fetch items");
                 const data: Item[] = await res.json();
 
-
-                const sorted = data.sort((a, b) => b.id - a.id);
+                // Sort by newest first (optional)
+                const sorted = data.sort(
+                    (a, b) => parseInt(b._id.slice(-6), 16) - parseInt(a._id.slice(-6), 16)
+                );
 
                 setItems(sorted.slice(0, 3));
             } catch (err) {
@@ -45,13 +47,13 @@ export default function RecentItems() {
             <div className="grid md:grid-cols-3 gap-6">
                 {items.map((item) => (
                     <Link
-                        key={item._id}               
-                        href={`/items/${item._id}`}   
+                        key={item._id} // use _id as key
+                        href={`/items/${item._id}`}
                         className="card bg-base-100 shadow-lg p-4 overflow-hidden hover:shadow-xl transition"
                     >
                         <div className="relative h-48 w-full mb-4 rounded overflow-hidden">
                             <Image
-                                src={item.image}        
+                                src={item.image}
                                 alt={item.name}
                                 fill
                                 className="object-cover group-hover:scale-105 transition-transform"
