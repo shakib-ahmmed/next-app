@@ -34,7 +34,7 @@ export default async function ItemDetailPage({ params }: Props) {
             alt={item.name}
             fill
             className="object-cover rounded shadow"
-            unoptimized // important for SSR with remote images
+            unoptimized 
           />
         </div>
 
